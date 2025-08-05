@@ -23,6 +23,8 @@ public partial class MusicShareDbContext : DbContext
 
     public virtual DbSet<Post> Posts { get; set; }
 
+    public virtual DbSet<User> Users { get; set; }
+
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         => optionsBuilder.UseMySql(new Func<string>(() =>
         {
@@ -83,9 +85,35 @@ public partial class MusicShareDbContext : DbContext
             entity.Property(e => e.Title)
                 .HasMaxLength(255)
                 .HasColumnName("title");
-            entity.Property(e => e.Vote)
-                .HasMaxLength(255)
-                .HasColumnName("vote");
+            entity.Property(e => e.Vote).HasColumnName("vote");
+        });
+
+        modelBuilder.Entity<User>(entity =>
+        {
+            entity.HasKey(e => e.Uuid).HasName("PRIMARY");
+
+            entity.ToTable("users");
+
+            entity.HasIndex(e => e.Username, "users_unique").IsUnique();
+
+            entity.Property(e => e.Uuid)
+                .HasMaxLength(36)
+                .HasColumnName("uuid");
+            entity.Property(e => e.Email)
+                .HasColumnType("text")
+                .HasColumnName("email");
+            entity.Property(e => e.Mod)
+                .HasColumnType("text")
+                .HasColumnName("mod");
+            entity.Property(e => e.Password)
+                .HasMaxLength(100)
+                .HasColumnName("password");
+            entity.Property(e => e.Regtime)
+                .HasColumnType("datetime")
+                .HasColumnName("regtime");
+            entity.Property(e => e.Username)
+                .HasMaxLength(100)
+                .HasColumnName("username");
         });
 
         OnModelCreatingPartial(modelBuilder);

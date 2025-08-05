@@ -13,7 +13,7 @@ public partial class Post
 
     public string Content { get; set; } = null!;
 
-    public string Mod { get; set; } = null!;
+    public string? Mod { get; set; }
 
-    public string? Vote { get; set; }
+    public long Vote { get; set; }
 }
